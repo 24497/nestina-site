@@ -1,49 +1,115 @@
-'use client';
+"use client";
+import { useState } from "react";
 
 export default function Home() {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    orderDetails: "",
+  });
+
+  const [submitted, setSubmitted] = useState(false);
+  const [errors, setErrors] = useState({});
+
+  const validateForm = () => {
+    let newErrors = {};
+    if (!formData.name.trim()) newErrors.name = "الاسم مطلوب";
+    if (!formData.phone.trim()) newErrors.phone = "رقم الهاتف مطلوب";
+    if (!formData.address.trim()) newErrors.address = "العنوان مطلوب";
+    if (!formData.orderDetails.trim()) newErrors.orderDetails = "تفاصيل الطلب مطلوبة";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert('تم استلام طلبك! سنتواصل معك قريبًا.');
+    if (validateForm()) {
+      setSubmitted(true);
+    }
   };
 
   return (
-    <main>
-      <h1 className="title">مرحبًا بكم في Nestina</h1>
-      <p className="subtitle">أفضل المراتب والمفروشات بجودة عالية وراحة لا مثيل لها.</p>
+    <main style={{ fontFamily: "Arial", padding: "20px", direction: "rtl" }}>
+      <h1 style={{ textAlign: "center" }}>أهلاً بك في Nestina</h1>
 
-      <section className="section">
-        <h2>طرق الدفع والتوصيل</h2>
-        <p>الدفع عند الاستلام متاح. الشحن مجانًا للطلبات التي تزيد عن 10,000 جنيه.</p>
-      </section>
-
-      <section className="section warning">
-        <h2>اتصل بنا</h2>
-        <p>📞 01065025189</p>
-        <p>📧 mohamedasem2256@gmail.com</p>
-      </section>
-
-      <section className="section light">
-        <h2>طلب منتج</h2>
-        <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ maxWidth: "500px", margin: "0 auto" }}>
+        <div>
           <label>الاسم:</label>
-          <input type="text" required />
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            style={{ width: "100%", padding: "8px" }}
+          />
+          {errors.name && <p style={{ color: "red" }}>{errors.name}</p>}
+        </div>
 
+        <div>
           <label>رقم الهاتف:</label>
-          <input type="tel" required />
+          <input
+            type="text"
+            name="phone"
+            value={formData.phone}
+            onChange={handleChange}
+            style={{ width: "100%", padding: "8px" }}
+          />
+          {errors.phone && <p style={{ color: "red" }}>{errors.phone}</p>}
+        </div>
 
-          <label>اسم المنتج:</label>
-          <input type="text" required />
+        <div>
+          <label>العنوان:</label>
+          <input
+            type="text"
+            name="address"
+            value={formData.address}
+            onChange={handleChange}
+            style={{ width: "100%", padding: "8px" }}
+          />
+          {errors.address && <p style={{ color: "red" }}>{errors.address}</p>}
+        </div>
 
-          <button type="submit">إرسال الطلب</button>
-        </form>
-      </section>
+        <div>
+          <label>تفاصيل الطلب:</label>
+          <textarea
+            name="orderDetails"
+            value={formData.orderDetails}
+            onChange={handleChange}
+            style={{ width: "100%", padding: "8px" }}
+          />
+          {errors.orderDetails && <p style={{ color: "red" }}>{errors.orderDetails}</p>}
+        </div>
 
-      <section className="section">
-        <h2>سياسة الخصوصية</h2>
-        <p>
-          نحن نحترم خصوصيتك. لا نقوم بمشاركة معلوماتك مع أي طرف ثالث. جميع البيانات التي يتم إرسالها من خلال نموذج الطلب يتم استخدامها فقط للتواصل معك وإتمام الطلب.
-        </p>
-      </section>
+        <button type="submit" style={{ marginTop: "10px", padding: "10px", width: "100%" }}>
+          إرسال الطلب
+        </button>
+
+        {submitted && (
+          <p style={{ color: "green", marginTop: "10px" }}>
+            تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.
+          </p>
+        )}
+      </form>
+
+      {/* اتصل بنا + سياسة الخصوصية */}
+      <footer style={{ display: "flex", justifyContent: "space-between", marginTop: "50px" }}>
+        <div style={{ textAlign: "left" }}>
+          <h4>اتصل بنا</h4>
+          <p>📧 mohamedasem2256@gmail.com</p>
+          <p>📞 01065025189</p>
+        </div>
+
+        <div style={{ textAlign: "right" }}>
+          <a href="/privacy" style={{ textDecoration: "none", color: "blue" }}>
+            سياسة الخصوصية
+          </a>
+        </div>
+      </footer>
     </main>
   );
 }

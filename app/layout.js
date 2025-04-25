@@ -1,17 +1,17 @@
 import './globals.css';
+import { CartProvider } from './context/CartContext';
 
 export const metadata = {
   title: 'Nestina',
-  description: 'أفضل مراتب ومفروشات للراحة المثالية',
+  description: 'مراتب وخدديات بجودة عالية',
 };
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl">
-      <head>
-        <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet" />
-      </head>
-      <body>{children}</body>
+    <html lang="ar">
+      <body>
+        <CartProvider>{children}</CartProvider>
+      </body>
     </html>
   );
 }
